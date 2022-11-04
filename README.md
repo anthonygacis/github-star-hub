@@ -1,4 +1,4 @@
-# Github Star Hub
+![alt text](https://banners.beyondco.de/Github%20Star%20Hub.png?theme=light&packageManager=&packageName=&pattern=architect&style=style_1&description=A+web+application+for+monitoring+my+starred+github+repositories&md=1&showWatermark=0&fontSize=100px&images=star)
 
 (Under Development)
 
