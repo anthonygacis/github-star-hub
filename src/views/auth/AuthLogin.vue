@@ -1,11 +1,12 @@
 <script setup>
 import { onMounted, reactive } from "vue";
-import { useAuthStore } from "../../stores/AuthStore.js";
 import { useRoute, useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/AuthStore.js";
 
 const state = reactive({
     email: "",
     password: "",
+    is_invalid: false,
     _is_disabled: false,
     _is_pass_show: false,
     _is_processing: false,
@@ -13,24 +14,31 @@ const state = reactive({
 
 const router = useRouter();
 const route = useRoute();
+const auth = useAuthStore();
 
 function togglePassShow() {
     state._is_pass_show = !state._is_pass_show;
 }
 
-function handleSignIn() {
+async function handleSignIn() {
     state._is_processing = true;
-    setTimeout(() => {
-        let auth = useAuthStore();
-
-        auth.is_auth = true;
-        state._is_processing = false;
+    try {
+        await auth.login(state.email, state.password);
         if (route.query.redirect) {
-            router.push(route.query.redirect.toString());
+            await router.push(route.query.redirect.toString());
         } else {
-            router.push("/");
+            await router.push("/");
         }
-    }, 700);
+    } catch (error) {
+        if (error.code === "auth/invalid-email") {
+            state.is_invalid = true;
+        }
+    }
+    state._is_processing = false;
+}
+
+function clearError() {
+    state.is_invalid = false;
 }
 
 onMounted(() => {
@@ -57,12 +65,15 @@ onMounted(() => {
                                     <label class="form-label">Email address</label>
                                     <input
                                         v-model="state.email"
+                                        :class="{ 'is-invalid': state.is_invalid }"
                                         :disabled="state._is_disabled"
                                         autocomplete="on"
                                         class="form-control"
                                         placeholder="your@email.com"
                                         type="email"
+                                        @input="clearError"
                                     />
+                                    <div class="invalid-feedback">Invalid credentials</div>
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label">
@@ -74,13 +85,18 @@ onMounted(() => {
                                     <div class="input-group input-group-flat">
                                         <input
                                             v-model="state.password"
+                                            :class="{ 'is-invalid': state.is_invalid }"
                                             :disabled="state._is_disabled"
                                             :type="state._is_pass_show ? 'text' : 'password'"
                                             autocomplete="off"
                                             class="form-control"
                                             placeholder="Your password"
+                                            @input="clearError"
                                         />
-                                        <span class="input-group-text">
+                                        <span
+                                            :class="{ 'border border-danger': state.is_invalid }"
+                                            class="input-group-text"
+                                        >
                                             <span
                                                 class="link-secondary"
                                                 data-bs-toggle="tooltip"
@@ -177,10 +193,6 @@ onMounted(() => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="text-center text-muted mt-3">
-                        Don't have account yet?
-                        <router-link tabindex="-1" to="/sign-up">Sign up</router-link>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,15 @@ import App from "./App.vue";
 import { router } from "./router";
 import { createPinia } from "pinia";
 import VueTablerIcons from "vue-tabler-icons";
+import { firebaseAuth } from "@/services/firebase";
 
-const pinia = createPinia();
-
-createApp(App).use(router).use(pinia).use(VueTablerIcons).mount("#app");
+let app = null;
+firebaseAuth.onAuthStateChanged(() => {
+    if (!app) {
+        app = createApp(App);
+        app.use(router);
+        app.use(createPinia());
+        app.use(VueTablerIcons);
+        app.mount("#app");
+    }
+});

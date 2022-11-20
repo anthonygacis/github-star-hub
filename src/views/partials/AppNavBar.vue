@@ -1,9 +1,18 @@
 <script setup>
 import { useAuthStore } from "@/stores/AuthStore.js";
+import { useRoute, useRouter } from "vue-router";
 
-function onLogout() {
+const router = useRouter();
+const route = useRoute();
+
+async function onLogout() {
     let auth = useAuthStore();
-    auth.logout();
+    try {
+        await auth.logout();
+        await router.push("/");
+    } catch (error) {
+        console.log(error);
+    }
 }
 </script>
 <template>
@@ -122,7 +131,7 @@ function onLogout() {
                 <a class="dropdown-item" href="#">Feedback</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="./settings.html">Settings</a>
-                <router-link class="dropdown-item" to="/login" @click.prevent="onLogout">Logout</router-link>
+                <a class="dropdown-item" href="#" @click.prevent="onLogout">Logout</a>
             </div>
         </div>
     </div>

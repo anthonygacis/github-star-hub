@@ -1,3 +1,8 @@
+<script setup>
+import { useAuthStore } from "@/stores/AuthStore.js";
+
+const auth = useAuthStore();
+</script>
 <template>
     <div class="navbar-expand-md">
         <div id="navbar-menu" class="collapse navbar-collapse">
@@ -18,6 +23,18 @@
                                     <briefcase-icon class="icon" />
                                 </span>
                                 <span class="nav-link-title"> Projects </span>
+                            </li>
+                        </router-link>
+                        <router-link
+                            v-if="auth.is_auth"
+                            :to="{ name: 'manage-hub' }"
+                            class="nav-item text-decoration-none"
+                        >
+                            <li class="nav-link">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <brand-github-icon class="icon" />
+                                </span>
+                                <span class="nav-link-title"> Manage Hub </span>
                             </li>
                         </router-link>
                     </ul>

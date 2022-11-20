@@ -1,3 +1,15 @@
+<script setup>
+import { onMounted } from "vue";
+import { firebaseAuth } from "@/services/firebase/index.js";
+import { useAuthStore } from "@/stores/AuthStore.js";
+
+onMounted(() => {
+    if (firebaseAuth.currentUser) {
+        const auth = useAuthStore();
+        auth.is_auth = true;
+    }
+});
+</script>
 <template>
     <router-view />
 </template>
