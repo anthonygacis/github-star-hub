@@ -27,7 +27,7 @@ router.beforeEach((to, from, next) => {
     NProgress.start();
     let auth = useAuthStore();
     const authenticated = auth.is_auth;
-    const onlyLoggedOut = to.matched.some((record) => record.meta.onlyLoggedOut);
+    // const onlyLoggedOut = to.matched.some((record) => record.meta.onlyLoggedOut);
     const isPublic = to.matched.some((record) => record.meta.public);
     if (!isPublic && !authenticated) {
         // this route requires auth, check if logged in
@@ -37,9 +37,9 @@ router.beforeEach((to, from, next) => {
             query: { redirect: to.fullPath },
         });
     }
-    if (authenticated && onlyLoggedOut) {
-        return next("/");
-    }
+    // if (authenticated && onlyLoggedOut) {
+    //     return next("/");
+    // }
 
     next();
 });
