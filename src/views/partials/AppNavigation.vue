@@ -20,7 +20,7 @@ const auth = useAuthStore();
                         <router-link :to="{ name: 'projects' }" class="nav-item text-decoration-none">
                             <li class="nav-link">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <briefcase-icon class="icon" />
+                                    <stars-icon class="icon" />
                                 </span>
                                 <span class="nav-link-title"> Projects </span>
                             </li>

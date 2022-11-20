@@ -1,7 +1,8 @@
 {
   "name": "github-star-hub",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

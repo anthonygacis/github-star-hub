@@ -1,9 +1,8 @@
 <script setup>
 import { useAuthStore } from "@/stores/AuthStore.js";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
-const route = useRoute();
 
 async function onLogout() {
     let auth = useAuthStore();
