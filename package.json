@@ -1,6 +1,7 @@
 {
   "name": "github-star-hub",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -9,9 +10,13 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@tabler/core": "^1.0.0-beta15",
+    "nprogress": "^0.2.0",
     "pinia": "^2.0.23",
+    "tom-select": "^2.2.2",
     "vue": "^3.2.41",
-    "vue-router": "^4.1.5"
+    "vue-router": "^4.1.5",
+    "vue-tabler-icons": "^2.16.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
