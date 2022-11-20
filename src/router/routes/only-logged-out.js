@@ -12,6 +12,7 @@ export default routes.map((route) => {
     const meta = {
         public: true,
         onlyLoggedOut: true,
+        exist: true,
     };
 
     return { ...route, meta };

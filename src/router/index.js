@@ -31,13 +31,14 @@ router.beforeEach((to, from, next) => {
     const authenticated = auth.is_auth;
     const onlyLoggedOut = to.matched.some((record) => record.meta.onlyLoggedOut);
     const isPublic = to.matched.some((record) => record.meta.public);
-    if (!isPublic && !authenticated) {
+    const isExist = to.matched.some((record) => record.meta.exist);
+    if (!isPublic && !authenticated && isExist) {
         return next({
             path: "/login",
             query: { redirect: to.fullPath },
         });
     }
-    if (isPublic && authenticated && onlyLoggedOut) {
+    if (isPublic && authenticated && onlyLoggedOut && isExist) {
         return next("/");
     }
 
