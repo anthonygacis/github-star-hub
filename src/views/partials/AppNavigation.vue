@@ -2,10 +2,8 @@
 import { useAuthStore } from "@/stores/AuthStore.js";
 
 const auth = useAuthStore();
-let password = "abc123234234";
 </script>
 <template>
-    <h1 v-html="password"></h1>
     <div class="navbar-expand-md">
         <div id="navbar-menu" class="collapse navbar-collapse">
             <div class="navbar navbar-light">
