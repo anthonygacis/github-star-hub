@@ -44,8 +44,6 @@ function clearError() {
 onMounted(() => {
     document.body.classList.add("d-flex", "flex-column");
     document.querySelector(".page").classList.add("page-center");
-    let password = "abcde2022";
-    console.log(password);
 });
 </script>
 

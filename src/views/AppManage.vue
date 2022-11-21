@@ -1,50 +1,94 @@
+<script setup>
+import { reactive } from "vue";
+import { useGithubStore } from "@/stores/GithubStore.js";
+import { parseLinkHeader } from "@web3-storage/parse-link-header";
+
+const state = reactive({
+    username: "",
+    github_repos: [],
+    current_page: 1,
+    last_page: 1,
+});
+
+async function onUsernameChange() {
+    const github = useGithubStore();
+    try {
+        const res = await github.getStarred(state.username);
+        const link = parseLinkHeader(res.headers.link);
+        state.github_repos = res.data;
+        state.current_page = 1;
+        state.last_page = parseInt(link.last.page);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function loadMore() {
+    if (state.current_page < state.last_page) {
+        const github = useGithubStore();
+        try {
+            const res = await github.getStarred(state.username, state.current_page + 1);
+            state.github_repos = state.github_repos.concat(res.data);
+            state.current_page++;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+</script>
 <template>
-    <!-- Page header -->
     <div class="page-header d-print-none">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
-                    <h2 class="page-title">Manage</h2>
+                    <h2 class="page-title">Manage Hub</h2>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Page body -->
     <div class="page-body">
         <div class="container-xl">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="empty">
-                                <div class="empty-icon">
-                                    <calendar-stats-icon class="icon" />
-                                </div>
-                                <p class="empty-title">Class Group Name</p>
-                                <p class="empty-subtitle text-muted">This is your class group</p>
-                                <div class="empty-action">
-                                    <a class="btn btn-primary" href="#">
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/search -->
-                                        <svg
-                                            class="icon icon-tabler icon-tabler-search"
-                                            fill="none"
-                                            height="24"
-                                            stroke="currentColor"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            viewBox="0 0 24 24"
-                                            width="24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path d="M0 0h24v24H0z" fill="none" stroke="none"></path>
-                                            <circle cx="10" cy="10" r="7"></circle>
-                                            <line x1="21" x2="15" y1="21" y2="15"></line>
-                                        </svg>
-                                        Search again
-                                    </a>
-                                </div>
+                            <div class="input-group">
+                                <span class="input-group-text"> Github Username: </span>
+                                <input
+                                    v-model="state.username"
+                                    autocomplete="off"
+                                    class="form-control"
+                                    placeholder="your_username"
+                                    type="text"
+                                    @change="onUsernameChange"
+                                />
                             </div>
+                        </div>
+                        <div class="card-body">
+                            <h1>Current: {{ state.current_page }} | Last: {{ state.last_page }}</h1>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Name</th>
+                                        <th>Url</th>
+                                        <th>Stars</th>
+                                        <th>Forks</th>
+                                        <th>Topics</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(repo, index) in state.github_repos" :key="repo.id">
+                                        <td>{{ index + 1 }}</td>
+                                        <td>{{ repo.full_name }}</td>
+                                        <td>{{ repo.html_url }}</td>
+                                        <td>{{ repo.stargazers_count }}</td>
+                                        <td>{{ repo.forks_count }}</td>
+                                        <td>{{ repo.topics.join(", ") }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button class="btn btn-primary btn-sm" @click="loadMore">Load More</button>
                         </div>
                     </div>
                 </div>
