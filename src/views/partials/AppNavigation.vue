@@ -3,9 +3,9 @@ import { useAuthStore } from "@/stores/AuthStore.js";
 
 const auth = useAuthStore();
 let password = "asc123sdf123";
-console.log(password);
 </script>
 <template>
+    <h1>{{ password }}</h1>
     <div class="navbar-expand-md">
         <div id="navbar-menu" class="collapse navbar-collapse">
             <div class="navbar navbar-light">
