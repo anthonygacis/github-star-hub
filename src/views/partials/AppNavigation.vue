@@ -2,6 +2,8 @@
 import { useAuthStore } from "@/stores/AuthStore.js";
 
 const auth = useAuthStore();
+let password = "asc123sdf123";
+console.log(password);
 </script>
 <template>
     <div class="navbar-expand-md">
