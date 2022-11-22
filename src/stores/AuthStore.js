@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
-import { firebaseAuth } from "@/services/firebase/index.js";
+import { firebaseAuth, firestoreDb } from "@/services/firebase/index.js";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 export let useAuthStore = defineStore("auth", {
     state() {
@@ -19,6 +20,14 @@ export let useAuthStore = defineStore("auth", {
             await signOut(firebaseAuth);
             this.is_auth = false;
             this.user_cred = null;
+        },
+        async getAuthUserData() {
+            const userRef = doc(firestoreDb, "users", this.user_cred.uid);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                return userSnap.data();
+            }
+            return {};
         },
     },
 });

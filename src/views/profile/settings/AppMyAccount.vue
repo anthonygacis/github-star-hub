@@ -1,10 +1,35 @@
 <script setup>
 import { useAuthStore } from "@/stores/AuthStore.js";
-import { onMounted } from "vue";
+import { onMounted, reactive } from "vue";
+import { firestoreDb } from "@/services/firebase/index.js";
+import { doc, setDoc } from "firebase/firestore";
 
 const auth = useAuthStore();
 
-onMounted(() => {});
+const state = reactive({
+    username: "",
+});
+
+async function updateGithubUsername() {
+    const userRef = doc(firestoreDb, "users", auth.user_cred.uid);
+    await setDoc(
+        userRef,
+        {
+            settings: {
+                username: state.username,
+            },
+        },
+        {
+            merge: true,
+        }
+    );
+}
+
+onMounted(async () => {
+    await auth.getAuthUserData().then((data) => {
+        state.username = data.settings.username;
+    });
+});
 </script>
 <template>
     <div class="card-body border-start">
@@ -30,7 +55,7 @@ onMounted(() => {});
         <h2 class="mb-4 mt-3">Github Account</h2>
         <div class="row g-3">
             <div class="col-md-12">
-                <input class="form-control" type="text" value="email@email.com" />
+                <input v-model="state.username" class="form-control" type="text" />
             </div>
         </div>
     </div>
@@ -41,7 +66,7 @@ onMounted(() => {});
             </div>
             <div class="btn-list">
                 <button class="btn btn-ghost-danger">Cancel</button>
-                <button class="btn btn-primary" disabled>Save</button>
+                <button class="btn btn-primary" @click="updateGithubUsername">Save</button>
             </div>
         </div>
     </div>
