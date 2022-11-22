@@ -1,17 +1,26 @@
 <script setup>
-import { onMounted } from "vue";
-import { firebaseAuth } from "@/services/firebase/index.js";
+import { onBeforeMount, ref } from "vue";
+import { firebaseAuth, isConfigured } from "@/services/firebase/index.js";
 import { useAuthStore } from "@/stores/AuthStore.js";
+import SetupError from "@/views/errors/SetupError.vue";
 
-onMounted(() => {
-    if (firebaseAuth.currentUser) {
-        const auth = useAuthStore();
-        auth.is_auth = true;
+const hasError = ref(false);
+
+onBeforeMount(() => {
+    if (isConfigured) {
+        if (firebaseAuth.currentUser) {
+            const auth = useAuthStore();
+            auth.is_auth = true;
+            auth.user_cred = firebaseAuth.currentUser;
+        }
+    } else {
+        hasError.value = true;
     }
 });
 </script>
 <template>
-    <router-view />
+    <router-view v-if="!hasError" />
+    <setup-error v-else />
 </template>
 
 <style>

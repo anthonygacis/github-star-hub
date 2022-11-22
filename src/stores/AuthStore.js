@@ -11,7 +11,7 @@ export let useAuthStore = defineStore("auth", {
     },
     actions: {
         async login(email, password) {
-            this.userCred = await signInWithEmailAndPassword(firebaseAuth, email, password);
+            await signInWithEmailAndPassword(firebaseAuth, email, password);
             this.is_auth = true;
         },
         async logout() {

@@ -74,6 +74,7 @@ async function loadMore() {
                                         <th>Url</th>
                                         <th>Stars</th>
                                         <th>Forks</th>
+                                        <th>Language</th>
                                         <th>Topics</th>
                                     </tr>
                                 </thead>
@@ -84,6 +85,7 @@ async function loadMore() {
                                         <td>{{ repo.html_url }}</td>
                                         <td>{{ repo.stargazers_count }}</td>
                                         <td>{{ repo.forks_count }}</td>
+                                        <td>{{ repo.language }}</td>
                                         <td>{{ repo.topics.join(", ") }}</td>
                                     </tr>
                                 </tbody>
