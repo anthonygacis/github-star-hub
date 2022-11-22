@@ -62,6 +62,14 @@ async function loadMore() {
                                     type="text"
                                     @change="onUsernameChange"
                                 />
+                                <span class="input-group-text">
+                                    <a v-tooltip="'Edit username'" class="link-secondary" href="#">
+                                        <edit-icon class="icon" />
+                                    </a>
+                                    <a v-tooltip="'Accept'" class="link-secondary ms-2" href="#">
+                                        <edit-icon class="icon" />
+                                    </a>
+                                </span>
                             </div>
                         </div>
                         <div class="card-body">

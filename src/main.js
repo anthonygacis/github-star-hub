@@ -7,9 +7,22 @@ import App from "./App.vue";
 import { router } from "./router";
 import { createPinia } from "pinia";
 import VueTablerIcons from "vue-tabler-icons";
+import { firebaseAuth } from "@/services/firebase/index.js";
 
-let app = createApp(App);
-app.use(router);
-app.use(createPinia());
-app.use(VueTablerIcons);
-app.mount("#app");
+let app = null;
+firebaseAuth.onAuthStateChanged(() => {
+    if (!app) {
+        app = createApp(App);
+        app.use(router);
+        app.use(createPinia());
+        app.use(VueTablerIcons);
+        app.directive("tooltip", function (el, binding) {
+            new bootstrap.Tooltip(el, {
+                title: binding.value,
+                placement: "top",
+                trigger: "hover",
+            });
+        });
+        app.mount("#app");
+    }
+});
