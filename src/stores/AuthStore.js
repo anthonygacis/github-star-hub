@@ -11,12 +11,14 @@ export let useAuthStore = defineStore("auth", {
     },
     actions: {
         async login(email, password) {
-            await signInWithEmailAndPassword(firebaseAuth, email, password);
+            const userCred = await signInWithEmailAndPassword(firebaseAuth, email, password);
             this.is_auth = true;
+            this.user_cred = userCred.user;
         },
         async logout() {
             await signOut(firebaseAuth);
             this.is_auth = false;
+            this.user_cred = null;
         },
     },
 });

@@ -125,13 +125,12 @@ async function onLogout() {
                 </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a class="dropdown-item" href="#">Status</a>
                 <a class="dropdown-item" href="#">Profile</a>
                 <a class="dropdown-item" href="https://github.com/anthonygacis/github-star-hub/issues" target="_blank">
                     Feedback
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="./settings.html">Settings</a>
+                <router-link :to="{ name: 'settings' }" class="dropdown-item">Settings</router-link>
                 <a class="dropdown-item" href="#" @click.prevent="onLogout">Logout</a>
             </div>
         </div>

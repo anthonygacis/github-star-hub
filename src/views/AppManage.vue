@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from "vue";
+import { onMounted, reactive } from "vue";
 import { useGithubStore } from "@/stores/GithubStore.js";
 import { parseLinkHeader } from "@web3-storage/parse-link-header";
 
@@ -8,20 +8,8 @@ const state = reactive({
     github_repos: [],
     current_page: 1,
     last_page: 1,
+    is_edit: false,
 });
-
-async function onUsernameChange() {
-    const github = useGithubStore();
-    try {
-        const res = await github.getStarred(state.username);
-        const link = parseLinkHeader(res.headers.link);
-        state.github_repos = res.data;
-        state.current_page = 1;
-        state.last_page = parseInt(link.last.page);
-    } catch (error) {
-        console.log(error);
-    }
-}
 
 async function loadMore() {
     if (state.current_page < state.last_page) {
@@ -35,6 +23,26 @@ async function loadMore() {
         }
     }
 }
+
+function onEdit() {
+    state.is_edit = true;
+}
+
+async function onUpdate() {
+    state.is_edit = false;
+    const github = useGithubStore();
+    try {
+        const res = await github.getStarred(state.username);
+        const link = parseLinkHeader(res.headers.link);
+        state.github_repos = res.data;
+        state.current_page = 1;
+        state.last_page = parseInt(link.last.page);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+onMounted(() => {});
 </script>
 <template>
     <div class="page-header d-print-none">
@@ -56,17 +64,30 @@ async function loadMore() {
                                 <span class="input-group-text"> Github Username: </span>
                                 <input
                                     v-model="state.username"
+                                    :disabled="!state.is_edit"
                                     autocomplete="off"
                                     class="form-control"
                                     placeholder="your_username"
                                     type="text"
-                                    @change="onUsernameChange"
+                                    @keyup.enter="onUpdate"
                                 />
                                 <span class="input-group-text">
-                                    <a v-tooltip="'Edit username'" class="link-secondary" href="#">
-                                        <edit-icon class="icon" />
+                                    <a
+                                        v-if="state.is_edit"
+                                        v-tooltip="'Update username'"
+                                        class="link-secondary"
+                                        href="#"
+                                        @click.prevent="onUpdate"
+                                    >
+                                        <check-icon class="icon" />
                                     </a>
-                                    <a v-tooltip="'Accept'" class="link-secondary ms-2" href="#">
+                                    <a
+                                        v-if="!state.is_edit"
+                                        v-tooltip="'Edit username'"
+                                        class="link-secondary"
+                                        href="#"
+                                        @click.prevent="onEdit"
+                                    >
                                         <edit-icon class="icon" />
                                     </a>
                                 </span>

@@ -16,12 +16,18 @@ firebaseAuth.onAuthStateChanged(() => {
         app.use(router);
         app.use(createPinia());
         app.use(VueTablerIcons);
-        app.directive("tooltip", function (el, binding) {
-            new bootstrap.Tooltip(el, {
-                title: binding.value,
-                placement: "top",
-                trigger: "hover",
-            });
+        app.directive("tooltip", {
+            mounted(el, binding) {
+                new bootstrap.Tooltip(el, {
+                    title: binding.value,
+                    placement: "top",
+                    trigger: "hover",
+                });
+            },
+            beforeUnmount(el) {
+                let tooltip = bootstrap.Tooltip.getInstance(el);
+                tooltip?.dispose();
+            },
         });
         app.mount("#app");
     }
