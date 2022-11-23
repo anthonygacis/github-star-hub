@@ -1,6 +1,6 @@
 <script setup>
 import { useAuthStore } from "@/stores/AuthStore.js";
-import { onMounted, reactive } from "vue";
+import { onBeforeMount, reactive } from "vue";
 import { firestoreDb } from "@/services/firebase/index.js";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -25,10 +25,8 @@ async function updateGithubUsername() {
     );
 }
 
-onMounted(async () => {
-    await auth.getAuthUserData().then((data) => {
-        state.username = data.settings.username;
-    });
+onBeforeMount(async () => {
+    state.username = auth.user_data?.settings?.username;
 });
 </script>
 <template>
