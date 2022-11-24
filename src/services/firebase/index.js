@@ -14,10 +14,21 @@ const firebaseConfig = {
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const firebaseAuth = getAuth(app);
-const firestoreDb = getFirestore(app);
+let app = null;
+let analytics = null;
+let firebaseAuth = null;
+let firestoreDb = null;
+let isConfigured = true;
 
-export { app, analytics, firebaseAuth, firestoreDb };
+try {
+    // Initialize Firebase
+    app = initializeApp(firebaseConfig);
+    analytics = getAnalytics(app);
+    firebaseAuth = getAuth(app);
+    firestoreDb = getFirestore(app);
+} catch (error) {
+    console.log(error);
+    isConfigured = false;
+}
+
+export { app, analytics, firebaseAuth, firestoreDb, isConfigured };

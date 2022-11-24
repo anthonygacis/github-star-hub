@@ -7,6 +7,7 @@ onMounted(() => {
     if (firebaseAuth.currentUser) {
         const auth = useAuthStore();
         auth.is_auth = true;
+        auth.user_cred = firebaseAuth.currentUser;
     }
 });
 </script>

@@ -1,6 +1,7 @@
 const Setup = () => import("../../views/setup/AppSetup.vue");
 const Manage = () => import("../../views/AppManage.vue");
 const LayoutMain = () => import("../../views/layouts/LayoutMain.vue");
+const AppSettings = () => import("../../views/profile/AppSettings.vue");
 
 const routes = [
     {
@@ -17,6 +18,18 @@ const routes = [
                 path: "hub",
                 name: "manage-hub",
                 component: Manage,
+            },
+        ],
+    },
+    {
+        path: "/profile",
+        name: "profile",
+        component: LayoutMain,
+        children: [
+            {
+                path: "settings",
+                name: "settings",
+                component: AppSettings,
             },
         ],
     },
