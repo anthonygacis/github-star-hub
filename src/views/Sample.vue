@@ -1,16 +1,4 @@
-<script setup>
-import { defineAsyncComponent } from "vue";
-import Loading from "@/components/single/Loading.vue";
-
-const Sample = defineAsyncComponent({
-    loader: () => import("./Sample.vue"),
-    delay: 200,
-    timeout: 3000,
-    loadingComponent: Loading,
-});
-</script>
 <template>
-    <Sample />
     <div class="page-header d-print-none">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
